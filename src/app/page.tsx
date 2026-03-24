@@ -6,10 +6,6 @@ const HomePage = () => {
   return (
     <div>
       <h2>Home Page</h2>
-      <div className="flex gap-2 underline text-blue-500">
-        <Link href={PATHS.ABOUT}>About</Link>
-        <Link href={PATHS.POSTS}>Posts</Link>
-      </div>
 
       <div>
         {FAKE_POSTS.map((post) => (
