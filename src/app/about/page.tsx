@@ -1,8 +1,11 @@
+import Heading from "@/components/Heading";
 
 const AboutPage = () => {
   return (
-    <div>AboutPage</div>
-  )
-}
+    <div>
+      <Heading title="About Page" description="This is about page." />
+    </div>
+  );
+};
 
-export default AboutPage
+export default AboutPage;

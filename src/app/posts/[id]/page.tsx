@@ -1,4 +1,5 @@
 import { FAKE_POSTS } from "@/data";
+import PostItem from "@/features/post/components/PostItem";
 import Link from "next/link";
 
 interface SinglePostPageProps {
@@ -14,15 +15,7 @@ const SinglePostPage = async ({ params }: SinglePostPageProps) => {
     return <div>Post not found</div>;
   }
 
-  return (
-    <div>
-      <h2 className="text-2xl font-bold">{post.title}</h2>
-      <Link href="/" className="underline text-blue-500">Back to Home</Link>
-      <p className="text-sm font-medium text-gray-500 line-clamp-1">
-        {post.body}
-      </p>
-    </div>
-  );
+  return <PostItem {...post} isCard={false} />;
 };
 
 export default SinglePostPage;
