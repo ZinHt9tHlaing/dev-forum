@@ -1,6 +1,7 @@
 import { PATHS } from "@/path";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { ThemeToggler } from "../ThemeToggler";
 
 const Navbar = () => {
   return (
@@ -20,6 +21,8 @@ const Navbar = () => {
             About
           </Link>
         </Button>
+
+        <ThemeToggler />
       </div>
     </div>
   );
