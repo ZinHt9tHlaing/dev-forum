@@ -1,6 +1,5 @@
-import { FAKE_POSTS } from "@/data";
 import PostItem from "@/features/post/components/PostItem";
-import Link from "next/link";
+import { getPostById } from "@/features/post/queries/post-queries";
 
 interface SinglePostPageProps {
   params: Promise<{ id: string }>;
@@ -8,8 +7,7 @@ interface SinglePostPageProps {
 
 const SinglePostPage = async ({ params }: SinglePostPageProps) => {
   const { id } = await params;
-
-  const post = FAKE_POSTS.find((post) => post.id === parseInt(id));
+  const post = await getPostById(id);
 
   if (!post) {
     return <div>Post not found</div>;
