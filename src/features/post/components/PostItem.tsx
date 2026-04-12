@@ -2,6 +2,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import Link from "next/link";
 import { PATHS } from "@/path";
 import { MoveUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { deletePost } from "../actions/post-actions";
 
 interface Props extends Post {
   isCard?: boolean;
@@ -33,6 +35,16 @@ const PostItem = ({ id, title, body, isCard = true }: Props) => {
             </Link>
           </Button>
         </CardContent>
+      )}
+
+      {!isCard && (
+        <CardFooter>
+          <form action={deletePost.bind(null, id as string)}>
+            <Button variant={"destructive"} size={"sm"}>
+              Delete
+            </Button>
+          </form>
+        </CardFooter>
       )}
     </Card>
   );
