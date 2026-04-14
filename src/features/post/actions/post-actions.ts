@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { PATHS } from "@/path";
+import { redirect } from "next/navigation";
 
 export const deletePost = async (id: string) => {
   await prisma.post.delete({
@@ -10,5 +11,5 @@ export const deletePost = async (id: string) => {
     },
   });
 
-  revalidatePath("/posts");
+  redirect(PATHS.POSTS);
 };

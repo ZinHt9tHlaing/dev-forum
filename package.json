@@ -4,9 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build", 
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:push": "pnpm dlx prisma db push",
+    "db:generate": "pnpm dlx prisma generate",
+    "db:seed": "pnpm dlx prisma db seed",
+    "db:studio": "pnpm dlx prisma studio"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
