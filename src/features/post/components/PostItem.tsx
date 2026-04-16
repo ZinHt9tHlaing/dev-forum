@@ -10,7 +10,7 @@ import { Post } from "../types/post";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PATHS } from "@/path";
-import { MoveUpRight } from "lucide-react";
+import { Edit, MoveUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { deletePost } from "../actions/post-actions";
 
@@ -29,11 +29,19 @@ const PostItem = ({ id, title, body, isCard = true }: Props) => {
       </CardHeader>
       {isCard && (
         <CardContent>
-          <Button variant={"outline"} size={"sm"} asChild>
-            <Link href={PATHS.SINGLE_POST(id.toString())}>
-              <MoveUpRight /> Read more
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button asChild>
+              <Link href={PATHS.SINGLE_POST(id.toString())}>
+                <MoveUpRight /> Read more
+              </Link>
+            </Button>
+
+            <Button variant={"secondary"} asChild>
+              <Link href={PATHS.EDIT_POST(id.toString())}>
+                <Edit /> Edit
+              </Link>
+            </Button>
+          </div>
         </CardContent>
       )}
 
