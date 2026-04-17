@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,6 +13,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Post } from "../types/post";
 import { updatePost } from "../actions/post-actions";
+import { useFormStatus } from "react-dom";
+import { Loader2 } from "lucide-react";
 
 interface EditPostFormProps {
   post: Post;
@@ -50,11 +53,28 @@ const EditPostForm = ({ post: { id, title, body } }: EditPostFormProps) => {
               />
             </div>
 
-            <Button type="submit">Edit</Button>
+            <SubmitButton />
           </form>
         </CardContent>
       </Card>
     </div>
+  );
+};
+
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? (
+        <div className="flex items-center gap-2">
+          <Loader2 className="w-4 h-4 animate-spin" />
+          <p>Updating...</p>
+        </div>
+      ) : (
+        "Update"
+      )}
+    </Button>
   );
 };
 
