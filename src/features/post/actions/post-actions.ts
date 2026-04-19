@@ -4,18 +4,16 @@ import { prisma } from "@/lib/prisma";
 import { PATHS } from "@/path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createPostSchema } from "@/schema/post-schema";
-import { ActionStateTypes, actionStateFilter } from "@/lib/action-state-filter";
+import { createPostSchema, updatePostSchema } from "@/schema/post-schema";
+import { actionClient } from "@/lib/safe-action";
 
-export const createPost = async (
-  _actionState: ActionStateTypes,
-  formData: FormData,
-) => {
-  try {
-    const data = createPostSchema.parse({
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-    });
+export const createPostAction = actionClient
+  .inputSchema(createPostSchema)
+  .action(async ({ parsedInput: { title, description } }) => {
+    const data = {
+      title,
+      description,
+    };
 
     await prisma.post.create({
       data: {
@@ -26,35 +24,32 @@ export const createPost = async (
 
     revalidatePath(PATHS.POSTS);
     redirect(PATHS.POSTS);
-  } catch (error) {
-    console.log("create post error", error);
-    return actionStateFilter(error, formData);
-  }
-};
-
-export const updatePost = async (id: string, formData: FormData) => {
-  const data = {
-    // id: formData.get("id") as string,
-    id,
-    title: formData.get("title") as string,
-    body: formData.get("description") as string,
-  };
-
-  await prisma.post.update({
-    where: {
-      id: data.id,
-    },
-    data: {
-      title: data.title,
-      body: data.body,
-    },
   });
 
-  revalidatePath(PATHS.POSTS);
-  redirect(PATHS.POSTS);
-};
+export const updatePostAction = actionClient
+  .inputSchema(updatePostSchema)
+  .action(async ({ parsedInput: { id, title, description } }) => {
+    const data = {
+      id,
+      title,
+      description,
+    };
 
-export const deletePost = async (id: string) => {
+    await prisma.post.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        title: data.title,
+        body: data.description,
+      },
+    });
+
+    revalidatePath(PATHS.POSTS);
+    redirect(PATHS.POSTS);
+  });
+
+export const deletePostAction = async (id: string) => {
   await prisma.post.delete({
     where: {
       id,

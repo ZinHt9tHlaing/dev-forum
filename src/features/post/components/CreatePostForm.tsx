@@ -1,61 +1,98 @@
 "use client";
 
+import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { createPost } from "@/features/post/actions/post-actions";
-import SubmitButton from "@/components/SubmitButton";
 import CardWrapper from "@/components/CardWrapper";
-import { useActionState } from "react";
-import { ActionStateTypes } from "@/lib/action-state-filter";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createPostSchema } from "@/schema/post-schema";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { useAction } from "next-safe-action/hooks";
+import { createPostAction } from "../actions/post-actions";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import SubmitButton from "@/components/SubmitButton";
+
+type formInput = z.infer<typeof createPostSchema>;
 
 const CreatePostForm = () => {
-  // const [isPending, startTransition] = useTransition();
+  const { execute, isPending, hasSucceeded, hasErrored } =
+    useAction(createPostAction);
 
-  // const createPostAction = async (formData: FormData) => {
-  //   startTransition(async () => {
-  //     await createPost(formData);
-  //   });
-  // };
-
-  const [actionState, formAction] = useActionState<ActionStateTypes, FormData>(
-    createPost,
-    {
-      message: "",
+  const form = useForm<formInput>({
+    resolver: zodResolver(createPostSchema),
+    defaultValues: {
+      title: "",
+      description: "",
     },
-  );
+  });
+
+  function onSubmit(data: formInput) {
+    const { title, description } = data;
+    execute({ title, description });
+  }
+
+  useEffect(() => {
+    if (hasSucceeded) {
+      toast.success("Post created successfully");
+      form.reset();
+    }
+
+    if (hasErrored) {
+      toast.error("Failed to create post");
+    }
+  }, [form, hasSucceeded, hasErrored]);
 
   return (
     <div>
       <CardWrapper title="Create Post" description="This will create new post.">
-        <form action={formAction} className="space-y-4">
-          <div>
-            <Label htmlFor="title">Title</Label>
-            <Input
-              type="text"
-              id="title"
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FieldGroup>
+            <Controller
+              control={form.control}
               name="title"
-              defaultValue={
-                (actionState?.payload?.get("title") as string) ?? ""
-              }
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor="title">Title</FieldLabel>
+                  <Input {...field} type="text" id="title" name="title" />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
-          </div>
+          </FieldGroup>
 
-          <div>
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
+          <FieldGroup>
+            <Controller
+              control={form.control}
               name="description"
-              defaultValue={
-                (actionState?.payload?.get("description") as string) ?? ""
-              }
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor="description">Description</FieldLabel>
+                  <Textarea {...field} id="description" name="description" />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
-          </div>
+          </FieldGroup>
 
-          <SubmitButton label="Create" pendingLabel="Creating..." />
-          {actionState?.message && (
-            <p className="text-red-500">{actionState.message}</p>
-          )}
+          <SubmitButton
+            label="Create"
+            pendingLabel="Creating..."
+            isPending={isPending}
+            form={form}
+          />
         </form>
       </CardWrapper>
     </div>

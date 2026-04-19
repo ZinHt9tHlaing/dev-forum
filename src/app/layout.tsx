@@ -41,7 +41,7 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
-          <Toaster position="top-right" richColors={true} />
+          <Toaster richColors position="top-right" duration={1500} />
         </ThemeProvider>
       </body>
     </html>
