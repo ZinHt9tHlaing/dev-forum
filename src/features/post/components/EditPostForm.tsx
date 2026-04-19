@@ -5,6 +5,12 @@ import { Post } from "../types/post";
 import { updatePost } from "../actions/post-actions";
 import SubmitButton from "@/components/SubmitButton";
 import CardWrapper from "@/components/CardWrapper";
+import * as z from "zod";
+
+const updatePostSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+});
 
 interface EditPostFormProps {
   post: Post;
