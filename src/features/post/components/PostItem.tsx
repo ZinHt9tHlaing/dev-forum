@@ -6,21 +6,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Post } from "../types/post";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PATHS } from "@/path";
 import { Edit, MoveUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { deletePostAction } from "../actions/post-actions";
+import { Badge } from "@/components/ui/badge";
+import { Post } from "../../../../generated/prisma/client";
 
 interface Props extends Post {
   isCard?: boolean;
 }
 
-const PostItem = ({ id, title, body, isCard = true }: Props) => {
+const PostItem = ({ id, title, body, status, isCard = true }: Props) => {
   return (
-    <Card>
+    <Card className="relative">
+      <Badge
+        variant={status === "IN_PROGRESS" ? "outline" : "default"}
+        className="absolute top-5 right-4"
+      >
+        {status}
+      </Badge>
       <CardHeader>
         <CardTitle className="text-xl font-semibold">{title}</CardTitle>
         <CardDescription className={cn(`text-sm ${isCard && "line-clamp-2"}`)}>

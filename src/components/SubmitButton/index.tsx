@@ -1,22 +1,19 @@
 import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { UseFormReturn, FieldValues } from "react-hook-form";
 
-interface SubmitButtonProps<T extends FieldValues> {
+interface SubmitButtonProps {
   label: string;
   pendingLabel: string;
   isPending: boolean;
-  form: UseFormReturn<T>;
 }
 
-const SubmitButton = <T extends FieldValues>({
+const SubmitButton = ({
   label,
   pendingLabel,
   isPending,
-  form,
-}: SubmitButtonProps<T>) => {
+}: SubmitButtonProps) => {
   return (
-    <Button type="submit" disabled={isPending || !form.formState.isValid}>
+    <Button type="submit" disabled={isPending}>
       {isPending ? (
         <div className="flex items-center gap-2">
           <Loader2 className="w-4 h-4 animate-spin" />

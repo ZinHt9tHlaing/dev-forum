@@ -10,15 +10,10 @@ import { actionClient } from "@/lib/safe-action";
 export const createPostAction = actionClient
   .inputSchema(createPostSchema)
   .action(async ({ parsedInput: { title, description } }) => {
-    const data = {
-      title,
-      description,
-    };
-
     await prisma.post.create({
       data: {
-        title: data.title,
-        body: data.description,
+        title,
+        body: description,
       },
     });
 
@@ -28,20 +23,15 @@ export const createPostAction = actionClient
 
 export const updatePostAction = actionClient
   .inputSchema(updatePostSchema)
-  .action(async ({ parsedInput: { id, title, description } }) => {
-    const data = {
-      id,
-      title,
-      description,
-    };
-
+  .action(async ({ parsedInput: { id, title, description, status } }) => {
     await prisma.post.update({
       where: {
-        id: data.id,
+        id: id,
       },
       data: {
-        title: data.title,
-        body: data.description,
+        title,
+        body: description,
+        status,
       },
     });
 

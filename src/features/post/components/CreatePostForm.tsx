@@ -91,7 +91,6 @@ const CreatePostForm = () => {
             label="Create"
             pendingLabel="Creating..."
             isPending={isPending}
-            form={form}
           />
         </form>
       </CardWrapper>

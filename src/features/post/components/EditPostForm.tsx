@@ -17,10 +17,15 @@ import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updatePostSchema } from "@/schema/post-schema";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import SubmitButton from "@/components/SubmitButton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EditPostFormProps {
   post: Post;
@@ -28,7 +33,9 @@ interface EditPostFormProps {
 
 type formInput = z.infer<typeof updatePostSchema>;
 
-const EditPostForm = ({ post: { id, title, body } }: EditPostFormProps) => {
+const EditPostForm = ({
+  post: { id, title, body, status },
+}: EditPostFormProps) => {
   const { execute, isPending, hasSucceeded, hasErrored } =
     useAction(updatePostAction);
 
@@ -38,12 +45,13 @@ const EditPostForm = ({ post: { id, title, body } }: EditPostFormProps) => {
       id: id.toString(),
       title: title,
       description: body,
+      status: status,
     },
   });
 
   function onSubmit(data: formInput) {
-    const { id, title, description } = data;
-    execute({ id, title, description });
+    const { id, title, description, status } = data;
+    execute({ id, title, description, status });
   }
 
   useEffect(() => {
@@ -115,11 +123,40 @@ const EditPostForm = ({ post: { id, title, body } }: EditPostFormProps) => {
             />
           </FieldGroup>
 
+          {/* Status */}
+          <FieldGroup>
+            <Controller
+              control={form.control}
+              name="status"
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor="status">Status</FieldLabel>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger id="status">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                      <SelectItem value="DONE">Done</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+
           <SubmitButton
             label="Update"
             pendingLabel="Updating..."
             isPending={isPending}
-            form={form}
           />
         </form>
       </CardWrapper>

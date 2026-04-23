@@ -17,6 +17,7 @@ export const createPostSchema = z.object({
 
 export const updatePostSchema = z.object({
   id: z.string(),
+  status: z.enum(["DONE", "IN_PROGRESS"]).default("IN_PROGRESS").optional(),
   ...postBaseSchema.shape,
 });
 
