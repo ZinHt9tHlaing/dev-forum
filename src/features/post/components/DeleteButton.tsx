@@ -32,12 +32,12 @@ const DeleteButton = ({ id }: DeleteButtonProps) => {
 
   useEffect(() => {
     if (hasSucceeded) {
-      toast.success("Post created successfully");
+      toast.success("Post deleted successfully");
       router.push(PATHS.POSTS);
     }
 
     if (hasErrored) {
-      toast.error("Failed to create post");
+      toast.error("Failed to delete post");
     }
   }, [hasSucceeded, hasErrored, router]);
 

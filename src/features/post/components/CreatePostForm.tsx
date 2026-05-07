@@ -52,7 +52,7 @@ const CreatePostForm = () => {
     if (hasErrored) {
       toast.error("Failed to create post");
     }
-  }, [form, hasSucceeded, hasErrored ]);
+  }, [form, hasSucceeded, hasErrored, router]);
 
   return (
     <div>
