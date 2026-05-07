@@ -3,8 +3,11 @@
 import { prisma } from "@/lib/prisma";
 import { PATHS } from "@/path";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { createPostSchema, updatePostSchema } from "@/schema/post-schema";
+import {
+  createPostSchema,
+  deletePostSchema,
+  updatePostSchema,
+} from "@/schema/post-schema";
 import { actionClient } from "@/lib/safe-action";
 
 export const createPostAction = actionClient
@@ -18,7 +21,6 @@ export const createPostAction = actionClient
     });
 
     revalidatePath(PATHS.POSTS);
-    redirect(PATHS.POSTS);
   });
 
 export const updatePostAction = actionClient
@@ -36,15 +38,16 @@ export const updatePostAction = actionClient
     });
 
     revalidatePath(PATHS.POSTS);
-    redirect(PATHS.POSTS);
   });
 
-export const deletePostAction = async (id: string) => {
-  await prisma.post.delete({
-    where: {
-      id,
-    },
-  });
+export const deletePostAction = actionClient
+  .inputSchema(deletePostSchema)
+  .action(async ({ parsedInput: { id } }) => {
+    await prisma.post.delete({
+      where: {
+        id,
+      },
+    });
 
-  redirect(PATHS.POSTS);
-};
+    revalidatePath(PATHS.POSTS);
+  });

@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { deletePostAction } from "../actions/post-actions";
 import { Badge } from "@/components/ui/badge";
 import { Post } from "../../../../generated/prisma/client";
+import DeleteButton from "./DeleteButton";
 
 interface Props extends Post {
   isCard?: boolean;
@@ -52,15 +53,7 @@ const PostItem = ({ id, title, body, status, isCard = true }: Props) => {
         </CardContent>
       )}
 
-      {!isCard && (
-        <CardFooter>
-          <form action={deletePostAction.bind(null, id as string)}>
-            <Button variant={"destructive"} size={"sm"}>
-              Delete
-            </Button>
-          </form>
-        </CardFooter>
-      )}
+      {!isCard && <DeleteButton id={id} />}
     </Card>
   );
 };

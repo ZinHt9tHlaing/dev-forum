@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Post } from "../types/post";
 import { updatePostAction } from "../actions/post-actions";
 import CardWrapper from "@/components/CardWrapper";
 import {
@@ -26,6 +25,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
+import { PATHS } from "@/path";
+import { Post } from "../../../../generated/prisma/client";
 
 interface EditPostFormProps {
   post: Post;
@@ -36,6 +38,7 @@ type formInput = z.infer<typeof updatePostSchema>;
 const EditPostForm = ({
   post: { id, title, body, status },
 }: EditPostFormProps) => {
+  const router = useRouter();
   const { execute, isPending, hasSucceeded, hasErrored } =
     useAction(updatePostAction);
 
@@ -58,12 +61,13 @@ const EditPostForm = ({
     if (hasSucceeded) {
       toast.success("Post updated successfully");
       form.reset();
+      router.push(PATHS.POSTS);
     }
 
     if (hasErrored) {
       toast.error("Failed to update post");
     }
-  }, [form, hasSucceeded, hasErrored]);
+  }, [form, hasSucceeded, hasErrored, router]);
 
   return (
     <div>

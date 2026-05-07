@@ -15,7 +15,7 @@ const SubmitButton = ({
   return (
     <Button type="submit" disabled={isPending}>
       {isPending ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 animate-pulse disabled:opacity-40 disabled:cursor-not-allowed">
           <Loader2 className="w-4 h-4 animate-spin" />
           <p>{pendingLabel}</p>
         </div>

@@ -16,14 +16,16 @@ import {
 } from "@/components/ui/field";
 import { useAction } from "next-safe-action/hooks";
 import { createPostAction } from "../actions/post-actions";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import SubmitButton from "@/components/SubmitButton";
+import { useRouter } from "next/navigation";
+import { PATHS } from "@/path";
 
 type formInput = z.infer<typeof createPostSchema>;
 
 const CreatePostForm = () => {
+  const router = useRouter();
+
   const { execute, isPending, hasSucceeded, hasErrored } =
     useAction(createPostAction);
 
@@ -44,12 +46,13 @@ const CreatePostForm = () => {
     if (hasSucceeded) {
       toast.success("Post created successfully");
       form.reset();
+      router.push(PATHS.POSTS);
     }
 
     if (hasErrored) {
       toast.error("Failed to create post");
     }
-  }, [form, hasSucceeded, hasErrored]);
+  }, [form, hasSucceeded, hasErrored ]);
 
   return (
     <div>
