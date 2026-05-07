@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -11,7 +10,6 @@ import Link from "next/link";
 import { PATHS } from "@/path";
 import { Edit, MoveUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { deletePostAction } from "../actions/post-actions";
 import { Badge } from "@/components/ui/badge";
 import { Post } from "../../../../generated/prisma/client";
 import DeleteButton from "./DeleteButton";
