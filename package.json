@@ -12,7 +12,8 @@
     "db:seed": "npx prisma db seed",
     "db:migrate": "npx prisma migrate dev",
     "db:reset": "npx prisma migrate reset",
-    "db:studio": "npx prisma studio"
+    "db:studio": "npx prisma studio",
+    "fix": "npx fix-react2shell-next"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
